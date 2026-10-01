@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BLORFAN Classe Visio 2026/2027</title>
+<style>
+:root{--bg:#07111f;--panel:#102238;--line:#294662;--txt:#f5f8fc;--muted:#b9c8d8;--accent:#42a5f5;--good:#4caf50;--warn:#ffb300}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#06101c,#102a43);color:var(--txt)}
+header{padding:18px 24px;background:#081727;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}h1{margin:0;font-size:25px}.sub{color:var(--muted);margin-top:5px}
+main{padding:18px;max-width:1500px;margin:auto}.card{background:rgba(16,34,56,.96);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 10px 35px #0005}.login{max-width:760px;margin:35px auto}.grid{display:grid;grid-template-columns:minmax(0,3fr) minmax(300px,1fr);gap:16px}.hidden{display:none!important}
+label{display:block;color:var(--muted);margin:12px 0 6px}input,select,button{font:inherit;border-radius:9px;border:1px solid #3d5d79;padding:10px 12px}input,select{width:100%;background:#081727;color:white}button{cursor:pointer;background:#1c5f91;color:white;font-weight:700}button:hover{filter:brightness(1.12)}button.alt{background:#31465b}button.good{background:#26783b}button.warn{background:#a86d00}.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1}.actions button{flex:0 0 auto}.badge{padding:7px 11px;border-radius:999px;background:#173a55;color:#d9efff;font-weight:bold}.room{font-family:monospace;background:#07111f;padding:8px 10px;border-radius:8px;word-break:break-all}
+#meet{height:70vh;min-height:500px;background:#050b12;border-radius:12px;overflow:hidden}.side h3{margin-top:6px}.resource{display:block;padding:10px;margin:8px 0;background:#0a1929;border:1px solid var(--line);border-radius:9px;color:#dff1ff;text-decoration:none}.resource:hover{background:#15304b}.status{padding:10px;border-radius:9px;background:#07111f;margin-top:10px;color:#d5e4f2}.small{font-size:13px;color:var(--muted)}.coursebox{margin-top:14px}.viewer{width:100%;height:62vh;min-height:480px;border:1px solid var(--line);border-radius:12px;background:white}.viewerEmpty{height:260px;display:flex;align-items:center;justify-content:center;text-align:center;padding:25px;background:#07111f;border:1px dashed #52708b;border-radius:12px;color:var(--muted)}table{width:100%;border-collapse:collapse;margin-top:10px}td,th{border-bottom:1px solid var(--line);padding:8px;text-align:left}@media(max-width:900px){.grid{grid-template-columns:1fr}#meet{height:60vh;min-height:430px}}
+</style>
+</head><body>
+<header><div><h1>🎓 BLORFAN — Classe Visio</h1><div class="sub">STI2D / SIN • Dr. A. BLORFAN • 2026/2027</div></div><div class="badge">Cours à distance</div></header>
+<main>
+<section id="entry" class="card login">
+<h2>Entrer dans la classe</h2><p class="small">Choisissez votre rôle. Le professeur crée une salle ; les élèves utilisent le nom de salle communiqué.</p>
+<div class="row"><div><label>Rôle</label><select id="role"><option value="student">Élève</option><option value="teacher">Professeur</option></select></div><div><label>Nom / prénom</label><input id="displayName" placeholder="Ex. Jean Dupont"></div></div>
+<div class="row"><div><label>Nom de la salle</label><input id="roomName" placeholder="Ex. BLORFAN-SIN-20261001-A7F3"></div><div><label>Code du cours</label><input id="courseCode" placeholder="Ex. SIN-4827"></div></div>
+<div class="row actions" style="margin-top:16px"><button id="generate" class="good">Créer une nouvelle salle</button><button id="join">Rejoindre la visioconférence</button></div>
+<div id="entryStatus" class="status">Prêt.</div>
+</section>
+
+<section id="classroom" class="hidden">
+<div class="grid">
+<div class="card"><div class="row" style="align-items:center;margin-bottom:10px"><div><strong>Salle :</strong> <span id="roomLabel" class="room"></span></div><button id="copyInvite" class="alt">Copier l'invitation</button><button id="showQr" class="alt">📱 QR Code</button><button id="raiseHand" class="good">✋ Lever la main</button><button id="leave" class="warn">Quitter</button></div><div id="qrPanel" class="status hidden" style="text-align:center;margin-bottom:10px"><div><b>QR Code — rejoindre la visioconférence</b></div><img id="qrImg" alt="QR Code de la salle" style="margin:12px auto;max-width:220px;width:100%;background:white;padding:8px;border-radius:10px"><div id="directLink" class="small" style="word-break:break-all"></div></div><div id="meet"></div>
+<div class="coursebox"><h2>🧑‍🏫 Présenter / expliquer un cours</h2><p class="small">Affichez ici un PDF, une page HTML ou un site web. Pour que tous les participants voient exactement votre document au même moment, utilisez ensuite le partage d’écran de Jitsi. Un fichier local reste uniquement sur votre ordinateur.</p><div class="row"><input id="courseUrl" placeholder="Coller l’adresse d’un PDF, d’une page HTML ou d’un site web"><button id="showUrl">🌐 Afficher le lien</button><button id="copyCourseLink" class="alt">🔗 Copier le lien du cours</button></div><div class="row" style="margin-top:10px"><input id="courseFile" type="file" accept=".pdf,.html,.htm,.txt,.doc,.docx"><button id="openCourseTab" class="alt">↗ Ouvrir dans un nouvel onglet</button></div><div id="courseMsg" class="status">Aucun support affiché.</div><div id="viewerEmpty" class="viewerEmpty">Le support du cours apparaîtra ici.<br>PDF • HTML • site web</div><iframe id="courseViewer" class="viewer hidden" title="Support de cours"></iframe></div>
+</div>
+<aside class="card side"><h3>📚 Ressources du cours</h3>
+<a class="resource" target="_blank" href="https://blorfan.github.io/VirtualLab/">⚡ VirtualLab</a>
+<a class="resource" target="_blank" href="https://blorfan.github.io/NetworkLab/">🌐 NetworkLab</a>
+<a class="resource" target="_blank" href="https://blorfan.github.io/PV_WIND/#fr">☀️ PV / Éolien</a>
+<a class="resource" target="_blank" href="https://blorfan.github.io/blocsCPP/">💻 Blocs ↔ C++ / Python</a>
+<h3>👥 Présences locales</h3><p class="small">Cette liste enregistre les entrées effectuées depuis ce navigateur. Pour une liste centralisée de tous les élèves, un petit serveur/base de données est nécessaire.</p>
+<table><thead><tr><th>Nom</th><th>Entrée</th></tr></thead><tbody id="attendance"></tbody></table>
+<button id="exportCsv" class="good" style="width:100%;margin-top:12px">Télécharger les présences CSV</button>
+<h3>ℹ️ Informations</h3><div id="info" class="status"></div></aside>
+</div></section>
+</main>
+<script src="https://meet.jit.si/external_api.js"></script>
+<script>
+const $=id=>document.getElementById(id); let api=null; let attendance=[];
+function token(n=4){const a='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';return Array.from({length:n},()=>a[Math.floor(Math.random()*a.length)]).join('')}
+function safeRoom(v){return v.trim().replace(/[^A-Za-z0-9_-]/g,'-').replace(/-+/g,'-')}
+$('generate').onclick=()=>{const d=new Date(); const ds=d.toISOString().slice(0,10).replaceAll('-',''); $('roomName').value=`BLORFAN-SIN-${ds}-${token()}`; $('courseCode').value=`SIN-${Math.floor(1000+Math.random()*9000)}`; $('role').value='teacher'; $('entryStatus').textContent='Nouvelle salle créée. Saisissez votre nom puis cliquez sur Rejoindre.'}
+$('join').onclick=()=>{const name=$('displayName').value.trim(), room=safeRoom($('roomName').value), code=$('courseCode').value.trim(); if(!name||!room){$('entryStatus').textContent='Veuillez saisir votre nom et le nom de la salle.';return} if(typeof JitsiMeetExternalAPI==='undefined'){$('entryStatus').textContent='Impossible de charger Jitsi. Vérifiez la connexion Internet.';return}
+$('entry').classList.add('hidden');$('classroom').classList.remove('hidden');$('roomLabel').textContent=room; const now=new Date().toLocaleString('fr-FR');attendance.push({name,time:now});renderAttendance();$('info').innerHTML=`Rôle : <b>${$('role').value==='teacher'?'Professeur':'Élève'}</b><br>Code : <b>${code||'non défini'}</b><br>Nom : <b>${name}</b>`;
+api=new JitsiMeetExternalAPI('meet.jit.si',{roomName:room,width:'100%',height:'100%',parentNode:$('meet'),userInfo:{displayName:name},configOverwrite:{prejoinPageEnabled:true,startWithAudioMuted:true,startWithVideoMuted:true},interfaceConfigOverwrite:{MOBILE_APP_PROMO:false}});
+}
+function renderAttendance(){$('attendance').innerHTML=attendance.map(x=>`<tr><td>${escapeHtml(x.name)}</td><td>${escapeHtml(x.time)}</td></tr>`).join('')}
+function escapeHtml(s){return s.replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function meetUrl(){const room=$('roomLabel').textContent.trim();return `https://meet.jit.si/${encodeURIComponent(room)}`}
+$('copyInvite').onclick=async()=>{const room=$('roomLabel').textContent, code=$('courseCode').value.trim(), link=meetUrl();const txt=`Classe Visio BLORFAN 2026/2027\nSalle : ${room}\nCode : ${code||'-'}\nLien direct pour rejoindre la visioconférence :\n${link}\n\nCliquez sur le lien puis saisissez votre nom.`;try{await navigator.clipboard.writeText(txt);$('copyInvite').textContent='Invitation + lien copiés ✓';setTimeout(()=>$('copyInvite').textContent="Copier l'invitation",2200)}catch(e){alert(txt)}}
+$('showQr').onclick=()=>{const panel=$('qrPanel'), link=meetUrl();$('directLink').textContent=link;$('qrImg').src=`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(link)}`;panel.classList.toggle('hidden');$('showQr').textContent=panel.classList.contains('hidden')?'📱 QR Code':'Masquer QR Code'}
+
+let currentCourseUrl=''; let localCourseObjectUrl='';
+function showCourse(src,label){ currentCourseUrl=src; $('courseViewer').src=src; $('courseViewer').classList.remove('hidden'); $('viewerEmpty').classList.add('hidden'); $('courseMsg').textContent=label||'Support affiché.'; }
+$('showUrl').onclick=()=>{let u=$('courseUrl').value.trim(); if(!u){$('courseMsg').textContent='Collez d’abord un lien.';return} if(!/^https?:\/\//i.test(u))u='https://'+u; showCourse(u,'Support Internet affiché. Si le site refuse l’affichage intégré, utilisez « Ouvrir dans un nouvel onglet ».');}
+$('courseFile').onchange=e=>{const f=e.target.files[0];if(!f)return;if(localCourseObjectUrl)URL.revokeObjectURL(localCourseObjectUrl);localCourseObjectUrl=URL.createObjectURL(f);currentCourseUrl=localCourseObjectUrl;const ext=(f.name.split('.').pop()||'').toLowerCase();if(['pdf','html','htm','txt'].includes(ext)){showCourse(localCourseObjectUrl,'Fichier local : '+f.name+' — visible ici sur cet ordinateur. Partagez votre écran Jitsi pour le montrer aux élèves.')}else{$('courseMsg').textContent='Fichier '+f.name+' sélectionné. Les fichiers DOC/DOCX ne s’affichent pas directement dans le navigateur : ouvrez-le puis partagez votre écran Jitsi.';window.open(localCourseObjectUrl,'_blank');}}
+$('openCourseTab').onclick=()=>{const u=currentCourseUrl||$('courseUrl').value.trim();if(u)window.open(u,'_blank');else $('courseMsg').textContent='Choisissez d’abord un fichier ou un lien.';}
+$('copyCourseLink').onclick=async()=>{let u=$('courseUrl').value.trim();if(!u||u.startsWith('blob:')){$('courseMsg').textContent='Pour envoyer un support aux élèves, utilisez un lien Internet public (PDF, HTML ou site web).';return}if(!/^https?:\/\//i.test(u))u='https://'+u;try{await navigator.clipboard.writeText(u);$('courseMsg').textContent='Lien du cours copié. Vous pouvez le coller dans le chat Jitsi.'}catch(e){prompt('Copiez ce lien :',u)}}
+$('raiseHand').onclick=()=>{if(api){try{api.executeCommand('toggleRaiseHand');$('raiseHand').textContent='✋ Main levée / abaissée';setTimeout(()=>$('raiseHand').textContent='✋ Lever la main',1800)}catch(e){$('courseMsg').textContent='Utilisez le bouton « Lever la main » directement dans la barre Jitsi.'}}}
+
+$('exportCsv').onclick=()=>{const rows=[['Nom','Heure entree'],...attendance.map(x=>[x.name,x.time])];const csv='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(';')).join('\r\n');const b=new Blob([csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='presences_BLORFAN.csv';a.click();URL.revokeObjectURL(a.href)}
+$('leave').onclick=()=>{if(api){api.dispose();api=null}$('classroom').classList.add('hidden');$('entry').classList.remove('hidden');$('meet').innerHTML='';$('entryStatus').textContent='Vous avez quitté la classe.'}
+</script>
+</body></html>
